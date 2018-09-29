@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:memage/SecondScreen.dart';
+import 'package:memage/ui/SecondScreen.dart';
+import 'package:memage/Model/MemeModel.dart';
 
 void main() => runApp(new MainApp());
 
@@ -18,9 +19,11 @@ class MainApp extends StatelessWidget {
 }
 
 class LandingPage extends StatelessWidget {
+  int counter = 0;
 
   @override
   Widget build(BuildContext context) {
+    int counter =0;
     return new Scaffold(
         appBar: new AppBar(
           title: new Text('Grid Demo'),
@@ -28,12 +31,11 @@ class LandingPage extends StatelessWidget {
         body: new GridView.count(
           crossAxisCount: 2,
           padding: const EdgeInsets.all(20.0),
-          children: new List<Widget>.generate(16, (index) {
+          children: new List<Widget>.generate(10, (index) {
             return new GridTile(
               child: new Card(
 //                child: Image.network("image.url"),
-                child: Image.network(
-                    "https://memegen.link/_YnV6egltZW1lcy9tZW1lcy1ldmVyeXdoZXJl.jpg"),
+                child: Image.network(generate_url(counter++)),
               ),
             );
           }),
@@ -42,12 +44,17 @@ class LandingPage extends StatelessWidget {
           child: Icon(Icons.add),
           onPressed: (){
             Navigator.push(
-                context, 
+                context,
                 new MaterialPageRoute(builder: (context) => SecondScreen())
             );
           }
         )
     );
+  }
+
+  String generate_url(int counter){
+    String url = "http://alchemyzons.com/images/funny_image/$counter"+"_resized.jpg";
+    return url;
   }
 }
 
