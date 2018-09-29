@@ -7,9 +7,9 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Memage',
       theme: new ThemeData(
-        primarySwatch: Colors.orange,
+        primarySwatch: Colors.purple,
       ),
       home: new LandingPage(),
     );
@@ -30,21 +30,20 @@ class LandingPage extends StatelessWidget {
           children: new List<Widget>.generate(16, (index) {
             return new GridTile(
               child: new Card(
-                child: Image.network("image.url"),
-//                  child: new Text('tile $index')
-//                child: Image.network(
-//                    "https://memegen.link/_YnV6egltZW1lcy9tZW1lcy1ldmVyeXdoZXJl.jpg"),
-                // color: Colors.blue.shade200,
-                //  child: new Center(
-
-                //  )
+//                child: Image.network("image.url"),
+                child: Image.network(
+                    "https://memegen.link/_YnV6egltZW1lcy9tZW1lcy1ldmVyeXdoZXJl.jpg"),
               ),
             );
           }),
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
-//          onPressed: fetchImage,
+          onPressed: (){
+            Navigator.push(
+                context, 
+                new MaterialPageRoute(builder: null)); //TODO
+          }
         )
     );
   }
