@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:memage/SecondScreen.dart';
 
 void main() => runApp(new MainApp());
 
@@ -42,7 +43,8 @@ class LandingPage extends StatelessWidget {
           onPressed: (){
             Navigator.push(
                 context, 
-                new MaterialPageRoute(builder: null)); //TODO
+                new MaterialPageRoute(builder: (context) => SecondScreen())
+            );
           }
         )
     );
