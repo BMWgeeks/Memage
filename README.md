@@ -1,4 +1,4 @@
-# memage
+# Memages
 
 A new Flutter application.
 
@@ -6,3 +6,4 @@ A new Flutter application.
 
 For help getting started with Flutter, view our online
 [documentation](https://flutter.io/).
+
