@@ -12,7 +12,7 @@ class MemeModel{
   List<String> tag;
   List<String> quote;
 
-  MemeModel(this.id, this.title, this.url);
+  MemeModel({this.id, this.title, this.url});
 
   void addQuote(String quote){
     this.quote.add(quote);
@@ -22,10 +22,12 @@ class MemeModel{
     this.tag.add(tag);
   }
 
-  MemeModel.fromJson(Map<String, dynamic> parsedJson){
-    id = parsedJson['id'];
-    title = parsedJson['title'];
-    url = parsedJson['url'];
+  factory MemeModel.fromJson(Map<String, dynamic> json) {
+    return MemeModel(
+      id: json['id'] as int,
+      title: json['title'] as String,
+      url: json['thumbnailUrl'] as String,
+    );
   }
 
 }

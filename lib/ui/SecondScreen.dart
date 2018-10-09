@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 margin: EdgeInsets.all(15.0),
                 child: FloatingActionButton(
                   onPressed: getImage,
-                  tooltip: 'Pick Image from gallery',
+                  tooltip: 'Pick image from gallery',
                   child: Icon(Icons.photo_album),
                 ),
               ),
@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 margin: EdgeInsets.all(15.0),
                 child: FloatingActionButton(
                   onPressed: getCamImage,
-                  tooltip: 'tak pic from cam',
+                  tooltip: 'Take pic from cam',
                   child: Icon(Icons.photo_camera),
                 ),
               ),
