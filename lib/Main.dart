@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:memage/ui/SecondScreen.dart';
 import 'package:memage/Model/MemeModel.dart';
 
+import './ui/OpeningPage.dart';
+
 void main() => runApp(new MainApp());
 
 class MainApp extends StatelessWidget {
@@ -13,7 +15,7 @@ class MainApp extends StatelessWidget {
       theme: new ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: new LandingPage(),
+      home: new Anime(),
     );
   }
 }
@@ -23,7 +25,7 @@ class LandingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int counter =0;
+    
     return new Scaffold(
         appBar: new AppBar(
           title: new Text('Grid Demo'),
