@@ -4,9 +4,9 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:async';
 import 'package:flutter/scheduler.dart';
+import 'dart:math' as math;
 
 import '../Main.dart';
-
 
 class Anime extends StatefulWidget {
   @override
@@ -19,6 +19,7 @@ class Anime extends StatefulWidget {
 class _AnimeState extends State<Anime> with TickerProviderStateMixin {
   AnimationController animationController;
   AnimationController _animeController;
+  ScrollController _scrollcontroller = new ScrollController();
 
   bool navigation = false;
 
@@ -28,32 +29,20 @@ class _AnimeState extends State<Anime> with TickerProviderStateMixin {
     super.initState();
 
     animationController = AnimationController(
-        duration: Duration(milliseconds: 2000), 
-        vsync: this
-        );
+        duration: Duration(milliseconds: 4000), vsync: this);
 
-         print(" this ");
-    animationController.addStatusListener((status)
-      {
-        if(status == AnimationStatus.completed)
-        {
-          navigation = true;
-          print(" this is happending navigation ");
-           Navigator.push(
-                context,
-                new MaterialPageRoute(builder: (context) => LandingPage())
-            );
-        }
-
-
-
-
-      });
+    print(" this ");
+    animationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        navigation = true;
+        print(" this is happending navigation ");
+        Navigator.push(context,
+            new MaterialPageRoute(builder: (context) => LandingPage()));
+      }
+    });
 
     _animeController = AnimationController(
-      duration: Duration( milliseconds: 3000), 
-      vsync: this
-      );
+        duration: Duration(milliseconds: 4000), vsync: this);
   }
 
   @override
@@ -61,7 +50,7 @@ class _AnimeState extends State<Anime> with TickerProviderStateMixin {
     // TODO: implement dispose
     animationController?.dispose();
     _animeController?.dispose();
-    
+
     super.dispose();
   }
 
@@ -69,13 +58,10 @@ class _AnimeState extends State<Anime> with TickerProviderStateMixin {
   Future _startAnime() async {
     try {
       await animationController.forward().orCancel;
-      
-    
     } on TickerCanceled {
       print(" error with animation start");
     }
   }
-
 
   Future _startAnime2() async {
     try {
@@ -104,36 +90,37 @@ class _AnimeState extends State<Anime> with TickerProviderStateMixin {
               height: 500.0,
               width: 300.0,
               decoration: BoxDecoration(
-                  
-                  color: Colors.grey.withOpacity(0.1),
-                  border: Border.all(
-                    color: Colors.blueAccent,
-                    style: BorderStyle.solid,
-                    
-                  ),
-                  ),
-              child: AnimationThing(
+                color: Colors.grey.withOpacity(0.1),
+                border: Border.all(
+                  color: Colors.blueAccent,
+                  style: BorderStyle.solid,
+                ),
+              ),
+              child: AnimationStateful(
                 controller: animationController,
                 scrollCon: new ScrollController(),
-
               ),
             ),
           ),
         ),
+        backgroundColor: Color.lerp(Colors.white, Colors.deepPurpleAccent, 0.1),
       ),
     );
   }
 }
 
-class AnimationThing extends StatelessWidget {
+class AnimationStateful extends StatefulWidget {
+  Animation controller;
+  ScrollController scrollCon;
+  AnimationStateful({Key key, this.controller, this.scrollCon});
+  @override
+  State<StatefulWidget> createState() =>
+      AnimationThing(controller: controller, scrollCon: scrollCon);
+}
 
-
-
-  AnimationThing({Key key, this.controller , this.scrollCon})
-      : opacity = Tween<double>(
-        begin: 0.0, 
-        end: 1.0)
-      .animate(
+class AnimationThing extends State {
+  AnimationThing({Key key, this.controller, this.scrollCon})
+      : opacity = Tween<double>(begin: 0.0, end: 1.0).animate(
           CurvedAnimation(
             parent: controller,
             curve: Interval(
@@ -143,27 +130,18 @@ class AnimationThing extends StatelessWidget {
             ),
           ),
         ),
-        rotate = Tween<double>(
-          begin: 40.0, 
-          end: 500.0)
-          .animate(CurvedAnimation(
+        rotate = Tween<double>(begin: 0.0, end: 300.0).animate(CurvedAnimation(
             parent: controller,
             curve: Interval(
-              0.1,
-              0.9,
+              0.5,
+              1.0,
               curve: Curves.fastOutSlowIn,
             ))),
         movement = EdgeInsetsTween(
-          begin: EdgeInsets.only(
-            bottom: 0.0, 
-            left: 0.0, 
-            right: 10.0 , 
-            top : 100.0 ),
-          end: EdgeInsets.only(
-            bottom: 0.0, 
-            left: 5.0 , 
-            top : 200.0, 
-            right: 200.0),
+          begin:
+              EdgeInsets.only(bottom: 0.0, left: 0.0, right: 10.0, top: 100.0),
+          end:
+              EdgeInsets.only(bottom: 0.0, left: 5.0, top: 200.0, right: 200.0),
         ).animate(
           CurvedAnimation(
             parent: controller,
@@ -174,36 +152,36 @@ class AnimationThing extends StatelessWidget {
             ),
           ),
         ),
-        width = Tween<double>(begin: 40.0, end: 500.0).animate(
+        width = Tween<double>(begin: 0.0, end: 300.0).animate(
           CurvedAnimation(
             parent: controller,
             curve: Interval(
               0.1,
-              0.5,
+              0.6,
               curve: Curves.easeOut,
             ),
           ),
         ),
-        height = Tween<double>(begin: 40.0, end: 500.0).animate(
+        height = Tween<double>(begin: 500.0, end: 500.0).animate(
           CurvedAnimation(
             parent: controller,
             curve: Interval(
               0.5,
-              0.6,
+              0.9,
               curve: Curves.fastOutSlowIn,
             ),
           ),
         ),
-        radius = BorderRadiusTween(
-          begin: BorderRadius.circular(0.0),
-          end: BorderRadius.circular(100.0),
+        radius = IntTween(
+          begin: 0,
+          end: 10,
         ).animate(
           CurvedAnimation(
             parent: controller,
             curve: Interval(
-              0.9,
+              0.6,
               1.0,
-              curve: Curves.ease,
+              curve: Curves.fastOutSlowIn,
             ),
           ),
         ),
@@ -213,8 +191,7 @@ class AnimationThing extends StatelessWidget {
             parent: controller,
             curve: Interval(0.0, 1.0, curve: Curves.elasticInOut),
           ),
-        ),
-        super(key: key);
+        );
 
   final Animation<double> controller;
   final Animation<double> opacity;
@@ -222,97 +199,110 @@ class AnimationThing extends StatelessWidget {
   final Animation<double> height;
   final Animation<EdgeInsets> movement;
 
-  final Animation<BorderRadius> radius;
+  final Animation<int> radius;
   final Animation<Color> color;
   final Animation<double> rotate;
 
   final ScrollController scrollCon;
-  
- 
+  final int JokeoftheDay = math.Random().nextInt(9);
+
+  bool start = false;
+  bool end = false;
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return AnimatedBuilder ( 
-      animation : controller, 
-      builder : (BuildContext context , Widget child)
-      {
-          _startScrollAnime(9*rotate.value);
-            return Container(
+    return AnimatedBuilder(
+        animation: controller,
+        builder: (BuildContext context, Widget child) {
+          _startScrollAnime(JokeoftheDay * rotate.value);
+          return Container(
               alignment: Alignment.center,
               //transform:  Matrix4.identity()..rotateZ(rotate.value),
               child: Opacity(
-                 
-                opacity: opacity.value,
-                child: ListView(
-                  
-                  scrollDirection: Axis.horizontal,
-                  controller: scrollCon,
-                  children:  new List<Widget>.generate(10, (index) {
+                  opacity: opacity.value,
+                  child: Column(children: [
+                    ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxHeight: 100.0,
+                          maxWidth: 400.0,
+                        ),
+                        
+                        child: Container(
+                           width: width.value,
+                            height: 50.0,
+                            child: Card(
+                               
+                              color: color.value,
+                                child: Center( child: 
+                                RichText(
+                              text: TextSpan(
+                                text: 'Joke of the Day ',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ))))),
+                    Expanded(
+                      child: NotificationListener<ScrollStartNotification>(
+                          onNotification: (_) => _scrollingStarted(),
+                          child: NotificationListener<ScrollEndNotification>(
+                            onNotification: (_) => _scrollingEnded(),
+                              child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            controller: scrollCon,
+                            //shrinkWrap: true,
+                            //reverse: true,
+                            padding: EdgeInsets.all(20.0),
+                            children: new List<Widget>.generate(10, (index) {
+                              return new GridTile(
+                                  child: Card(
+                                child: Image.network(
+                                   generate_url(!end ? math.Random().nextInt(9) : index),
+                                  width: 400.0,
+                                  height: 500.0,
+                                  fit: BoxFit.contain,
+                                ),
+                              ));
+                            }),
+                          ))),
+                    )
+                  ])));
+        });
+  }
 
-                 
-            return new GridTile(
-              
-              child: new Card(
-                  
-//                child: Image.network("image.url"),
-                child: Image.network(generate_url(index) , width: width.value, height: height.value),
-              
-              
-              ),
-            );
-          }),
-          )
-          )
-           );
-           }
-    );
+  bool _scrollingStarted() {
+    setState(() {
+      start = true;
+    });
+    return false;
   }
 
 
   
-  void _goToElement(double index){
-    scrollCon.animateTo(((index)), // 100 is the height of container and index of 6th element is 5
-        duration: const Duration(milliseconds: 1000),
-        curve: Curves.easeOut);
+  bool _scrollingEnded() {
+    setState(() {
+      end = true;
+    });
+    return false;
   }
 
+  void _goToElement(double index) {
+    scrollCon.animateTo(
+        ((index)), // 100 is the height of container and index of 6th element is 5
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.fastOutSlowIn);
+  }
 
-   Future _startScrollAnime(double index) async {
+  Future _startScrollAnime(double index) async {
     try {
       await _goToElement(index);
-      
-    
     } on TickerCanceled {
       print(" error with auto scroll animation");
     }
   }
 
-  String generate_url(int counter){
-    String url = "http://alchemyzons.com/images/funny_image/$counter"+"_resized.jpg";
+  String generate_url(int counter) {
+    String url =
+        "http://alchemyzons.com/images/funny_image/$counter" + "_resized.jpg";
     return url;
   }
 }
-
-  // Container(
-  //     //  padding: movement.value,
-  //       //transform: Matrix4.identity()..rotateZ(rotate.value),
-  //       alignment: Alignment.center,
-  //       child: Opacity(
-  //           opacity: opacity.value,
-  //           child: Container(
-  //             child:Image.network("http://alchemyzons.com/images/funny_image/1"+"_resized.jpg", fit: BoxFit.cover,),
-  //             width: width.value,
-  //             height: height.value,
-  //             decoration: BoxDecoration(
-  //               color: color.value,
-  //               border: Border.all(
-  //                 color: Colors.deepPurple[300],
-  //                 width: 2.0,
-        
-  //               ),
-  //             borderRadius: radius.value,
-  //             ),
-  //           )
-  //         )
-  //         ),
