@@ -87,13 +87,14 @@ class _AnimeState extends State<Anime> with TickerProviderStateMixin {
           },
           child: Center(
             child: Container(
-              height: 500.0,
-              width: 300.0,
+              height: 700.0,
+              width: 400.0,
               decoration: BoxDecoration(
                 color: Colors.grey.withOpacity(0.1),
                 border: Border.all(
-                  color: Colors.blueAccent,
+                  color: Colors.purple[300],
                   style: BorderStyle.solid,
+                  width: 15.0
                 ),
               ),
               child: AnimationStateful(
@@ -103,7 +104,7 @@ class _AnimeState extends State<Anime> with TickerProviderStateMixin {
             ),
           ),
         ),
-        backgroundColor: Color.lerp(Colors.white, Colors.deepPurpleAccent, 0.1),
+        backgroundColor: Color.lerp(Colors.black, Colors.black, 0.1),
       ),
     );
   }
@@ -118,6 +119,34 @@ class AnimationStateful extends StatefulWidget {
       AnimationThing(controller: controller, scrollCon: scrollCon);
 }
 
+class SinCurve extends Curve
+{
+  const SinCurve(this.frequency ,{  this.power = 1 } ) :assert(frequency != null);
+  final double frequency;
+  final int power;
+
+  @override
+  double transform( double t)
+  {
+    return math.pow( math.sin(frequency *t), power);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class AnimationThing extends State {
   AnimationThing({Key key, this.controller, this.scrollCon})
       : opacity = Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -125,39 +154,24 @@ class AnimationThing extends State {
             parent: controller,
             curve: Interval(
               0.0,
-              0.2,
-              curve: Curves.fastOutSlowIn,
-            ),
-          ),
-        ),
-        rotate = Tween<double>(begin: 0.0, end: 300.0).animate(CurvedAnimation(
-            parent: controller,
-            curve: Interval(
-              0.5,
               1.0,
-              curve: Curves.fastOutSlowIn,
-            ))),
-        movement = EdgeInsetsTween(
-          begin:
-              EdgeInsets.only(bottom: 0.0, left: 0.0, right: 10.0, top: 100.0),
-          end:
-              EdgeInsets.only(bottom: 0.0, left: 5.0, top: 200.0, right: 200.0),
-        ).animate(
-          CurvedAnimation(
-            parent: controller,
-            curve: Interval(
-              0.1,
-              0.9,
-              curve: Curves.fastOutSlowIn,
+              curve: new SinCurve(50.0, power: 2),
             ),
           ),
         ),
+        rotate = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+            parent: controller,
+            curve: Interval(
+              0.0,
+              1.0,
+              curve:new SinCurve(100.0, power: 2),
+            ))),
         width = Tween<double>(begin: 0.0, end: 300.0).animate(
           CurvedAnimation(
             parent: controller,
             curve: Interval(
-              0.1,
-              0.6,
+              0.7,
+              0.9,
               curve: Curves.easeOut,
             ),
           ),
@@ -166,20 +180,20 @@ class AnimationThing extends State {
           CurvedAnimation(
             parent: controller,
             curve: Interval(
-              0.5,
-              0.9,
+              0.7,
+              1.0,
               curve: Curves.fastOutSlowIn,
             ),
           ),
         ),
-        radius = IntTween(
+        count = IntTween(
           begin: 0,
           end: 10,
         ).animate(
           CurvedAnimation(
             parent: controller,
             curve: Interval(
-              0.6,
+              0.1,
               1.0,
               curve: Curves.fastOutSlowIn,
             ),
@@ -194,16 +208,22 @@ class AnimationThing extends State {
         );
 
   final Animation<double> controller;
+
+  
   final Animation<double> opacity;
   final Animation<double> width;
   final Animation<double> height;
-  final Animation<EdgeInsets> movement;
 
-  final Animation<int> radius;
+  final Animation<int> count;
   final Animation<Color> color;
   final Animation<double> rotate;
 
   final ScrollController scrollCon;
+
+
+  
+
+  final String wordings = " Joke of the Day";
   final int JokeoftheDay = math.Random().nextInt(9);
 
   bool start = false;
@@ -211,17 +231,88 @@ class AnimationThing extends State {
 
   @override
   Widget build(BuildContext context) {
+
+    String _wordsToDisplay = wordings.substring(0, count.value);
+
     // TODO: implement build
     return AnimatedBuilder(
         animation: controller,
         builder: (BuildContext context, Widget child) {
-          _startScrollAnime(JokeoftheDay * rotate.value);
+         
           return Container(
               alignment: Alignment.center,
               //transform:  Matrix4.identity()..rotateZ(rotate.value),
               child: Opacity(
-                  opacity: opacity.value,
+                  opacity: 0.9,
                   child: Column(children: [
+                    Opacity(
+                      opacity: opacity.value,
+                      
+                      child:
+                    ConstrainedBox(
+
+
+                      constraints: BoxConstraints(
+
+                        
+                          maxHeight: 50.0,
+                          maxWidth: 50.0,
+                      
+
+
+
+
+
+
+
+                      )
+                      ,
+
+                      child:
+                      DecoratedBox(
+                      
+
+
+                        decoration: BoxDecoration(
+
+                          color: Colors.purple[50],
+                          
+
+
+
+
+
+
+
+
+                        ),
+
+
+
+                        child: 
+                        Card (  
+                          child: Icon( Icons.star ,
+                        color: Colors.yellowAccent, 
+                        size: 40.0,)),
+                      )
+
+
+
+
+
+
+
+
+
+                    )
+                    ),
+
+
+
+
+
+
+
                     ConstrainedBox(
                         constraints: BoxConstraints(
                           maxHeight: 100.0,
@@ -233,57 +324,47 @@ class AnimationThing extends State {
                             height: 50.0,
                             child: Card(
                                
-                              color: color.value,
-                                child: Center( child: 
+                              color: Colors.black87,
+                                child: Align( 
+                                  alignment: Alignment(0.0, 0.0),
+                                  
+                                  child: 
                                 RichText(
                               text: TextSpan(
-                                text: 'Joke of the Day ',
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                text:  _wordsToDisplay,
+                                style: TextStyle(fontWeight: FontWeight.bold , decorationStyle: TextDecorationStyle.wavy ),
                               ),
                             ))))),
-                    Expanded(
-                      child: NotificationListener<ScrollStartNotification>(
-                          onNotification: (_) => _scrollingStarted(),
-                          child: NotificationListener<ScrollEndNotification>(
-                            onNotification: (_) => _scrollingEnded(),
-                              child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            controller: scrollCon,
-                            //shrinkWrap: true,
-                            //reverse: true,
-                            padding: EdgeInsets.all(20.0),
-                            children: new List<Widget>.generate(10, (index) {
-                              return new GridTile(
-                                  child: Card(
+
+                            Container(
+                                child: Transform(
+                                alignment: FractionalOffset.center,
+                                transform: Matrix4.identity()
+                                ..setEntry(3, 2, 0.001)
+                                ..rotateY(rotate.value),
                                 child: Image.network(
-                                   generate_url(!end ? math.Random().nextInt(9) : index),
+
+                                  generate_url(count.value),
                                   width: 400.0,
-                                  height: 500.0,
+                                  height: 400.0,
                                   fit: BoxFit.contain,
-                                ),
-                              ));
-                            }),
-                          ))),
-                    )
+                                )),
+
+                            
+
+
+
+                            ),
+
+
+
+
+                 
                   ])));
         });
   }
 
-  bool _scrollingStarted() {
-    setState(() {
-      start = true;
-    });
-    return false;
-  }
-
-
   
-  bool _scrollingEnded() {
-    setState(() {
-      end = true;
-    });
-    return false;
-  }
 
   void _goToElement(double index) {
     scrollCon.animateTo(
@@ -306,3 +387,11 @@ class AnimationThing extends State {
     return url;
   }
 }
+// Image.network(
+//                                   !start
+//                                       ? "https://i.imgur.com/btkN0x5.png"
+//                                       : generate_url(!end ? math.Random().nextInt(9) : index),
+//                                   width: 400.0,
+//                                   height: 500.0,
+//                                   fit: BoxFit.contain,
+//                                 ),
